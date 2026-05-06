@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
+// URL base de producción - los GIFs necesitan URLs absolutas para funcionar en sitios externos
+const BASE_URL = 'https://dinamic-ads-system.pages.dev';
+
 // Idiomas soportados actualmente (carpetas base)
 const LANGUAGES = ['es', 'en'];
 const CATEGORIES = ['lateral', 'centro'];
@@ -35,7 +38,7 @@ function generateIndex() {
                         const gifFile = adFiles.find(file => file.toLowerCase().endsWith('.gif'));
                         
                         if (gifFile) {
-                            gifUrl = `/${lang}/${cat}/${item}/${gifFile}`;
+                            gifUrl = `${BASE_URL}/${lang}/${cat}/${item}/${gifFile}`;
                         }
 
                         const linkPath = path.join(adFolderPath, 'link.txt');
