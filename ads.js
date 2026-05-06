@@ -16,14 +16,14 @@
     // 2. CONFIGURACIÓN PRINCIPAL
     const CONFIG = {
         // Dominio base donde está alojado el sistema
-        baseUrl: 'https://dinamic-662.pages.dev', 
+        baseUrl: 'https://dinamic-ads-system.pages.dev', 
 
         // MODO A: Inyección directa en el DOM (Mejor para imágenes transparentes sin bordes)
         // MODO B: Aislamiento mediante iframe 'ad.html' (Mejor encapsulamiento tipo YouTube)
         mode: 'B', // Cambiar a 'B' para probar el modo iframe
 
         // URL absoluta del iframe para el MODO B
-        iframeUrl: 'https://dinamic-662.pages.dev/ad.html',
+        iframeUrl: 'https://dinamic-ads-system.pages.dev/ad.html',
 
         // ID único para el contenedor global
         containerId: 'ad-network-wrapper'
