@@ -1,0 +1,16 @@
+/*
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, HEAD, OPTIONS
+  Access-Control-Allow-Headers: Content-Type
+
+/es/ad_lateral.json
+  Access-Control-Allow-Origin: *
+
+/es/ad_centro.json
+  Access-Control-Allow-Origin: *
+
+/en/ad_lateral.json
+  Access-Control-Allow-Origin: *
+
+/en/ad_centro.json
+  Access-Control-Allow-Origin: *
