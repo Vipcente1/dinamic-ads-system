@@ -16,7 +16,7 @@
     // 2. CONFIGURACIÓN PRINCIPAL
     const CONFIG = {
         // Dominio base donde está alojado el sistema
-        baseUrl: 'https://dinamic-662.pages.dev/', 
+        baseUrl: 'https://dinamic-662.pages.dev', 
 
         // MODO A: Inyección directa en el DOM (Mejor para imágenes transparentes sin bordes)
         // MODO B: Aislamiento mediante iframe 'ad.html' (Mejor encapsulamiento tipo YouTube)
