@@ -1,0 +1,26 @@
+[
+    {
+        "id": "ad_es_lateral_ali",
+        "gif": "/es/lateral/ali/ali.gif",
+        "link": "https://es.aliexpress.com/",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_lateral_ali2",
+        "gif": "/es/lateral/ali2/ali2.gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_lateral_bet",
+        "gif": "/es/lateral/bet/bet.gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_lateral_bet2",
+        "gif": "/es/lateral/bet2/bet2.gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    }
+]

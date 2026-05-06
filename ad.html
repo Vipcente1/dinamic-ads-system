@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advertisement</title>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            overflow: hidden; 
+            background: transparent; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        .ad-container { 
+            position: relative; 
+            display: inline-block; 
+            width: 100%; 
+            height: 100%; 
+            box-sizing: border-box;
+            background: transparent;
+        }
+
+        #ad-content-area {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .ad-link { 
+            display: block; 
+            width: 100%;
+            height: 100%;
+            text-decoration: none; 
+            cursor: pointer;
+        }
+        
+        .ad-img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain;
+            border: none; 
+            display: block; 
+            background: transparent; 
+        }
+        
+        /* Botones superiores estilo Google Ads */
+        .ad-controls {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.7);
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            backdrop-filter: blur(2px);
+            z-index: 5;
+            padding: 2px;
+        }
+
+        .ad-badge {
+            font-size: 10px;
+            color: #5f6368;
+            padding: 0 4px;
+            display: none; /* Se oculta por defecto en espacios pequeños, o se muestra en hover */
+            align-items: center;
+            gap: 3px;
+            white-space: nowrap;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .ad-controls:hover .ad-badge {
+            display: flex;
+        }
+
+        .badge-icon {
+            font-size: 11px;
+            font-weight: bold;
+            color: #0f9d58; /* Verde Google */
+        }
+
+        .close-btn { 
+            background: transparent; 
+            color: #5f6368; 
+            width: 20px; 
+            height: 20px; 
+            text-align: center; 
+            line-height: 20px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            border: none;
+            text-decoration: none; 
+            font-weight: normal;
+            transition: color 0.2s ease, background 0.2s ease;
+            border-radius: 2px;
+        }
+        
+        .close-btn:hover { 
+            color: #d93025; 
+            background: rgba(217, 48, 37, 0.1);
+        }
+
+        /* Paneles ocultos (Feedback y Cerrado) */
+        .overlay-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .feedback-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #202124;
+            margin-bottom: 10px;
+        }
+
+        .feedback-btn {
+            background: #fff;
+            border: 1px solid #dadce0;
+            color: #0f9d58; /* Verde Google */
+            padding: 5px 10px;
+            margin: 3px 0;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            width: 80%;
+            max-width: 150px;
+            transition: background 0.2s;
+        }
+
+        .feedback-btn:hover {
+            background: #f1f3f4;
+        }
+
+        .closed-icon {
+            font-size: 24px;
+            color: #0f9d58; /* Verde Google */
+            margin-bottom: 5px;
+        }
+
+        .closed-text {
+            font-size: 12px;
+            color: #5f6368;
+        }
+        .closed-text strong {
+            color: #202124;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="ad-root" class="ad-container" style="display: none;">
+        
+        <!-- Área del GIF -->
+        <div id="ad-content-area">
+            <div class="ad-controls">
+                <a href="#" class="ad-badge" title="Información del anuncio">
+                    <span class="badge-icon">ⓘ</span> Ads by Dinamic Spa
+                </a>
+                <div id="btn-close" class="close-btn" title="Dejar de ver este anuncio">✕</div>
+            </div>
+            <a id="ad-link" class="ad-link" href="#" target="_blank" rel="noopener noreferrer">
+                <img id="ad-img" class="ad-img" alt="Advertisement">
+            </a>
+        </div>
+
+        <!-- Panel de Pregunta (Feedback) -->
+        <div id="feedback-panel" class="overlay-panel" style="display: none;">
+            <div class="feedback-title">¿Por qué cierras esto?</div>
+            <button class="feedback-btn" onclick="submitFeedback('irrelevante')">No me interesa</button>
+            <button class="feedback-btn" onclick="submitFeedback('repetido')">Se repite mucho</button>
+            <button class="feedback-btn" onclick="submitFeedback('inapropiado')">Inapropiado</button>
+        </div>
+
+        <!-- Panel Final "Cerrado" -->
+        <div id="closed-panel" class="overlay-panel" style="display: none;">
+            <div class="closed-icon">✓</div>
+            <div class="closed-text">Anuncio cerrado por<br><strong>Dinamic Spa</strong></div>
+        </div>
+
+    </div>
+    
+    <script>
+        let currentAdId = null;
+
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const dataParam = params.get('data');
+            
+            if (!dataParam) return;
+
+            try {
+                const adData = JSON.parse(decodeURIComponent(dataParam));
+                currentAdId = adData.id;
+                
+                const root = document.getElementById('ad-root');
+                const link = document.getElementById('ad-link');
+                const img = document.getElementById('ad-img');
+                const btnClose = document.getElementById('btn-close');
+
+                // Configurar datos
+                link.href = adData.link;
+                img.src = adData.gif;
+
+                // Notificar redimensión cuando carga (si es necesario)
+                img.onload = function() {
+                    const h = root.offsetHeight;
+                    window.parent.postMessage({ action: 'resizeAd', height: h }, '*');
+                };
+
+                // Lógica del botón cerrar (abre feedback)
+                btnClose.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    document.getElementById('ad-content-area').style.display = 'none';
+                    document.getElementById('feedback-panel').style.display = 'flex';
+                };
+
+                // Mostrar el contenedor padre
+                root.style.display = 'block';
+
+            } catch (e) {
+                console.error('Dinamic Spa Ads: Error renderizando iframe', e);
+            }
+        })();
+
+        // Función llamada por los botones de feedback
+        function submitFeedback(reason) {
+            // Ocultar feedback, mostrar mensaje de cierre
+            document.getElementById('feedback-panel').style.display = 'none';
+            document.getElementById('closed-panel').style.display = 'flex';
+
+            // Esperar 2 segundos para que el usuario lea el mensaje y luego remover el anuncio
+            setTimeout(() => {
+                if (currentAdId) {
+                    window.parent.postMessage({ action: 'closeAd', id: currentAdId }, '*');
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

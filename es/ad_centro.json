@@ -1,0 +1,32 @@
+[
+    {
+        "id": "ad_es_centro_net",
+        "gif": "/es/centro/net/net.gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_centro_nik",
+        "gif": "/es/centro/nik/nik.gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_centro_nik2",
+        "gif": "/es/centro/nik2/nik2.gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_centro_sod",
+        "gif": "/es/centro/sod/sod.gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_centro_sod2 (2)",
+        "gif": "/es/centro/sod2 (2)/sod2 (2).gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    }
+]
