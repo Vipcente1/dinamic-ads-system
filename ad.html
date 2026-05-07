@@ -4,25 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advertisement</title>
+
     <style>
-        body { 
-            margin: 0; 
-            padding: 0; 
-            overflow: hidden; 
-            background: transparent; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100vh;
-            width: 100vw;
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: transparent;
+            width: 100%;
+            height: auto;
         }
-        
-        .ad-container { 
-            position: relative; 
-            display: inline-block; 
-            width: 100%; 
-            height: 100%; 
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .ad-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            height: auto;
             box-sizing: border-box;
             background: transparent;
         }
@@ -30,34 +36,33 @@
         #ad-content-area {
             position: relative;
             width: 100%;
-            height: 100%;
+            height: auto;
         }
-        
-        .ad-link { 
-            display: block; 
+
+        .ad-link {
+            display: block;
             width: 100%;
-            height: 100%;
-            text-decoration: none; 
+            height: auto;
+            text-decoration: none;
             cursor: pointer;
         }
-        
-        .ad-img { 
-            width: 100%; 
-            height: 100%; 
+
+        .ad-img {
+            width: 100%;
+            height: auto;
             object-fit: contain;
-            border: none; 
-            display: block; 
-            background: transparent; 
+            border: none;
+            display: block;
+            background: transparent;
         }
-        
-        /* Botones superiores estilo Google Ads */
+
         .ad-controls {
             position: absolute;
             top: 0;
             right: 0;
             display: flex;
             align-items: center;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255,255,255,0.7);
             border-bottom-left-radius: 4px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             backdrop-filter: blur(2px);
@@ -69,14 +74,14 @@
             font-size: 10px;
             color: #5f6368;
             padding: 0 4px;
-            display: none; /* Se oculta por defecto en espacios pequeños, o se muestra en hover */
+            display: none;
             align-items: center;
             gap: 3px;
             white-space: nowrap;
             cursor: pointer;
             text-decoration: none;
         }
-        
+
         .ad-controls:hover .ad-badge {
             display: flex;
         }
@@ -84,38 +89,37 @@
         .badge-icon {
             font-size: 11px;
             font-weight: bold;
-            color: #0f9d58; /* Verde Google */
+            color: #0f9d58;
         }
 
-        .close-btn { 
-            background: transparent; 
-            color: #5f6368; 
-            width: 20px; 
-            height: 20px; 
-            text-align: center; 
-            line-height: 20px; 
-            font-size: 16px; 
-            cursor: pointer; 
+        .close-btn {
+            background: transparent;
+            color: #5f6368;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 16px;
+            cursor: pointer;
             border: none;
-            text-decoration: none; 
             font-weight: normal;
-            transition: color 0.2s ease, background 0.2s ease;
+            transition: color 0.2s ease,
+                        background 0.2s ease;
             border-radius: 2px;
         }
-        
-        .close-btn:hover { 
-            color: #d93025; 
-            background: rgba(217, 48, 37, 0.1);
+
+        .close-btn:hover {
+            color: #d93025;
+            background: rgba(217,48,37,0.1);
         }
 
-        /* Paneles ocultos (Feedback y Cerrado) */
         .overlay-panel {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255,255,255,0.95);
             z-index: 10;
             display: flex;
             flex-direction: column;
@@ -129,8 +133,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .feedback-title {
@@ -143,7 +152,7 @@
         .feedback-btn {
             background: #fff;
             border: 1px solid #dadce0;
-            color: #0f9d58; /* Verde Google */
+            color: #0f9d58;
             padding: 5px 10px;
             margin: 3px 0;
             border-radius: 4px;
@@ -160,7 +169,7 @@
 
         .closed-icon {
             font-size: 24px;
-            color: #0f9d58; /* Verde Google */
+            color: #0f9d58;
             margin-bottom: 5px;
         }
 
@@ -168,101 +177,239 @@
             font-size: 12px;
             color: #5f6368;
         }
+
         .closed-text strong {
             color: #202124;
         }
 
     </style>
+
 </head>
+
 <body>
-    <div id="ad-root" class="ad-container" style="display: none;">
-        
-        <!-- Área del GIF -->
+
+    <div id="ad-root"
+         class="ad-container"
+         style="display:none;">
+
         <div id="ad-content-area">
+
             <div class="ad-controls">
-                <a href="#" class="ad-badge" title="Información del anuncio">
-                    <span class="badge-icon">ⓘ</span> Ads by Dinamic Spa
+
+                <a href="#"
+                   class="ad-badge"
+                   title="Información del anuncio">
+
+                    <span class="badge-icon">
+                        ⓘ
+                    </span>
+
+                    Ads by Dinamic Spa
+
                 </a>
-                <div id="btn-close" class="close-btn" title="Dejar de ver este anuncio">✕</div>
+
+                <div id="btn-close"
+                     class="close-btn"
+                     title="Dejar de ver este anuncio">
+
+                    ✕
+
+                </div>
+
             </div>
-            <a id="ad-link" class="ad-link" href="#" target="_blank" rel="noopener noreferrer">
-                <img id="ad-img" class="ad-img" alt="Advertisement">
+
+            <a id="ad-link"
+               class="ad-link"
+               href="#"
+               target="_blank"
+               rel="noopener noreferrer">
+
+                <img id="ad-img"
+                     class="ad-img"
+                     alt="Advertisement">
+
             </a>
+
         </div>
 
-        <!-- Panel de Pregunta (Feedback) -->
-        <div id="feedback-panel" class="overlay-panel" style="display: none;">
-            <div class="feedback-title">¿Por qué cierras esto?</div>
-            <button class="feedback-btn" onclick="submitFeedback('irrelevante')">No me interesa</button>
-            <button class="feedback-btn" onclick="submitFeedback('repetido')">Se repite mucho</button>
-            <button class="feedback-btn" onclick="submitFeedback('inapropiado')">Inapropiado</button>
+        <div id="feedback-panel"
+             class="overlay-panel"
+             style="display:none;">
+
+            <div class="feedback-title">
+                ¿Por qué cierras esto?
+            </div>
+
+            <button class="feedback-btn"
+                    onclick="submitFeedback('irrelevante')">
+
+                No me interesa
+
+            </button>
+
+            <button class="feedback-btn"
+                    onclick="submitFeedback('repetido')">
+
+                Se repite mucho
+
+            </button>
+
+            <button class="feedback-btn"
+                    onclick="submitFeedback('inapropiado')">
+
+                Inapropiado
+
+            </button>
+
         </div>
 
-        <!-- Panel Final "Cerrado" -->
-        <div id="closed-panel" class="overlay-panel" style="display: none;">
-            <div class="closed-icon">✓</div>
-            <div class="closed-text">Anuncio cerrado por<br><strong>Dinamic Spa</strong></div>
+        <div id="closed-panel"
+             class="overlay-panel"
+             style="display:none;">
+
+            <div class="closed-icon">
+                ✓
+            </div>
+
+            <div class="closed-text">
+                Anuncio cerrado por<br>
+                <strong>Dinamic Spa</strong>
+            </div>
+
         </div>
 
     </div>
-    
+
     <script>
+
         let currentAdId = null;
 
         (function() {
-            const params = new URLSearchParams(window.location.search);
-            const dataParam = params.get('data');
-            
+
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+            const dataParam =
+                params.get('data');
+
             if (!dataParam) return;
 
             try {
-                const adData = JSON.parse(decodeURIComponent(dataParam));
-                currentAdId = adData.id;
-                
-                const root = document.getElementById('ad-root');
-                const link = document.getElementById('ad-link');
-                const img = document.getElementById('ad-img');
-                const btnClose = document.getElementById('btn-close');
 
-                // Configurar datos
-                link.href = adData.link;
-                img.src = adData.gif;
+                const adData =
+                    JSON.parse(
+                        decodeURIComponent(dataParam)
+                    );
 
-                // Notificar redimensión cuando carga (si es necesario)
+                currentAdId =
+                    adData.id;
+
+                const root =
+                    document.getElementById('ad-root');
+
+                const link =
+                    document.getElementById('ad-link');
+
+                const img =
+                    document.getElementById('ad-img');
+
+                const btnClose =
+                    document.getElementById('btn-close');
+
+                link.href =
+                    adData.link;
+
+                img.src =
+                    adData.gif;
+
+                img.style.display =
+                    'block';
+
+                img.onerror = function() {
+
+                    console.error(
+                        'GIF no cargó:',
+                        adData.gif
+                    );
+
+                };
+
                 img.onload = function() {
-                    const h = root.offsetHeight;
-                    window.parent.postMessage({ action: 'resizeAd', height: h }, '*');
+
+                    root.style.display =
+                        'block';
+
+                    const h =
+                        root.offsetHeight;
+
+                    window.parent.postMessage(
+                        {
+                            action: 'resizeAd',
+                            height: h
+                        },
+                        '*'
+                    );
+
                 };
 
-                // Lógica del botón cerrar (abre feedback)
                 btnClose.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    document.getElementById('ad-content-area').style.display = 'none';
-                    document.getElementById('feedback-panel').style.display = 'flex';
-                };
 
-                // Mostrar el contenedor padre
-                root.style.display = 'block';
+                    e.preventDefault();
+
+                    e.stopPropagation();
+
+                    document.getElementById(
+                        'ad-content-area'
+                    ).style.display = 'none';
+
+                    document.getElementById(
+                        'feedback-panel'
+                    ).style.display = 'flex';
+
+                };
 
             } catch (e) {
-                console.error('Dinamic Spa Ads: Error renderizando iframe', e);
+
+                console.error(
+                    'Dinamic Spa Ads Error:',
+                    e
+                );
+
             }
+
         })();
 
-        // Función llamada por los botones de feedback
         function submitFeedback(reason) {
-            // Ocultar feedback, mostrar mensaje de cierre
-            document.getElementById('feedback-panel').style.display = 'none';
-            document.getElementById('closed-panel').style.display = 'flex';
 
-            // Esperar 2 segundos para que el usuario lea el mensaje y luego remover el anuncio
+            document.getElementById(
+                'feedback-panel'
+            ).style.display = 'none';
+
+            document.getElementById(
+                'closed-panel'
+            ).style.display = 'flex';
+
             setTimeout(() => {
+
                 if (currentAdId) {
-                    window.parent.postMessage({ action: 'closeAd', id: currentAdId }, '*');
+
+                    window.parent.postMessage(
+                        {
+                            action: 'closeAd',
+                            id: currentAdId
+                        },
+                        '*'
+                    );
+
                 }
+
             }, 2000);
+
         }
+
     </script>
+
 </body>
 </html>
