@@ -1,0 +1,56 @@
+[
+    {
+        "id": "ad_es_lateral_ali",
+        "gif": "https://dinamic-ads-system.pages.dev/es/lateral/ali.gif",
+        "link": "https://es.aliexpress.com/",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_lateral_ali2",
+        "gif": "https://dinamic-ads-system.pages.dev/es/lateral/ali2.gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_lateral_bet",
+        "gif": "https://dinamic-ads-system.pages.dev/es/lateral/bet.gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_lateral_bet2",
+        "gif": "https://dinamic-ads-system.pages.dev/es/lateral/bet2.gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_central_net",
+        "gif": "https://dinamic-ads-system.pages.dev/es/central/net.gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_central_nik",
+        "gif": "https://dinamic-ads-system.pages.dev/es/central/nik.gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_central_nik2",
+        "gif": "https://dinamic-ads-system.pages.dev/es/central/nik2.gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_central_sod",
+        "gif": "https://dinamic-ads-system.pages.dev/es/central/sod.gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    },
+    {
+        "id": "ad_es_central_sod2 (2)",
+        "gif": "https://dinamic-ads-system.pages.dev/es/central/sod2 (2).gif",
+        "link": "https://www.google.com",
+        "duration": 0
+    }
+]
