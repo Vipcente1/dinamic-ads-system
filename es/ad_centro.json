@@ -3,60 +3,60 @@
     "id": "ad_es_centro_sod2",
     "gif": "https://dinamic-ads-system.pages.dev/es/centro/sod2.gif",
     "link": "https://www.google.com",
-    "duration": 10000
+    "duration": 0
   },
   {
     "id": "ad_es_centro_bet",
     "gif": "https://dinamic-ads-system.pages.dev/es/centro/bet.gif",
     "link": "https://betano.com",
-    "duration": 10000
+    "duration": 0
   },
   {
     "id": "ad_es_centro_nik",
     "gif": "https://dinamic-ads-system.pages.dev/es/centro/nik.gif",
     "link": "https://www.nike.com",
-    "duration": 10000
+    "duration": 0
   },
   {
     "id": "ad_es_centro_shn",
     "gif": "https://dinamic-ads-system.pages.dev/es/centro/shn.gif",
     "link": "https://www.shein.com",
-    "duration": 100000
+    "duration": 0
   },
   {
     "id": "ad_es_centro_coc",
     "gif": "https://dinamic-ads-system.pages.dev/es/centro/coc.gif",
     "link": "https://www.coca-cola.com",
-    "duration": 100000
+    "duration": 0
   },
   {
     "id": "ad_es_centro_gtr",
     "gif": "https://dinamic-ads-system.pages.dev/es/centro/gtr.gif",
     "link": "https://www.gatorade.com",
-    "duration": 100000
+    "duration": 0
   },
   {
     "id": "ad_es_centro_gar",
     "gif": "https://dinamic-ads-system.pages.dev/es/centro/gar.gif",
     "link": "https://www.garnier.cl",
-    "duration": 100000
+    "duration": 0
   },
   {
     "id": "ad_es_centro_sab",
     "gif": "https://dinamic-ads-system.pages.dev/es/centro/sab.gif",
     "link": "https://www.sabory.cl",
-    "duration": 10000000
+    "duration": 0
   },
   {
     "id": "ad_es_centro_alx",
     "gif": "https://dinamic-ads-system.pages.dev/es/centro/ali.gif",
     "link": "https://www.aliexpress.com",
-    "duration": 10000000
+    "duration": 0
   },
   {
     "id": "ad_es_centro_net",
     "gif": "https://dinamic-ads-system.pages.dev/es/centro/net.gif",
     "link": "https://www.netflix.com",
-    "duration": 1000000
+    "duration": 0
   }
 ]
