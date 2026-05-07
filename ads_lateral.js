@@ -1,84 +1,72 @@
 /**
  * AD NETWORK SYSTEM - EMBED SCRIPT
- * Sistema ligero de publicidad tipo Embed (similar a YouTube)
- * Características: Transparente, No bloqueante, Soporte Multi-Modo (Directo / Iframe)
+ * Sistema ligero de publicidad tipo Embed
+ * Mejorado: soporte duration infinito, arrays, preload GIF y estabilidad
  */
 
 (function () {
-    // Protección para entornos SSR (Server-Side Rendering) como Next.js
+
     if (typeof window === 'undefined') return;
 
-    // 1. CONTROL DE DUPLICACIÓN
-    // Evitar que el sistema se inicialice más de una vez si el webmaster inserta el script varias veces.
     if (window.__AdNetworkInitialized) return;
     window.__AdNetworkInitialized = true;
 
-    // 2. CONFIGURACIÓN PRINCIPAL
     const CONFIG = {
-        // Dominio base donde está alojado el sistema
-        baseUrl: 'https://dinamic-ads-system.pages.dev', 
-
-        // MODO A: Inyección directa en el DOM (Mejor para imágenes transparentes sin bordes)
-        // MODO B: Aislamiento mediante iframe 'ad.html' (Mejor encapsulamiento tipo YouTube)
-        mode: 'B', // Cambiar a 'B' para probar el modo iframe
-
-        // URL absoluta del iframe para el MODO B
+        baseUrl: 'https://dinamic-ads-system.pages.dev',
+        mode: 'B',
         iframeUrl: 'https://dinamic-ads-system.pages.dev/ad.html',
-
-        // ID único para el contenedor global
         containerId: 'ad-network-wrapper-lateral'
     };
 
-    /**
-     * 3. FUNCIONES DE SEGURIDAD
-     * Sanitiza las URLs (GIFs y Links) provistas por la API (JSON)
-     * para mitigar inyecciones de código malicioso XSS.
-     */
     function sanitizeUrl(url) {
         if (!url) return '';
+
         try {
             const parsed = new URL(url, window.location.href);
-            // Solo permitir protocolos seguros
+
             if (['http:', 'https:'].includes(parsed.protocol)) {
                 return parsed.href;
             }
-        } catch (e) {
-            // Falla silenciosa si la URL no es válida
-        }
+
+        } catch (e) {}
+
         return '';
     }
 
-    /**
-     * 4. LÓGICA DE CIERRE
-     * Cierra el anuncio actual y guarda el estado en sessionStorage.
-     * @param {string} adId - El ID unico del anuncio.
-     * @param {number|null} timerId - ID del timeout de autodestrucción.
-     */
     function closeAd(adId, timerId) {
+
         const container = document.getElementById(CONFIG.containerId);
+
         if (container) {
+
             container.remove();
-            // Evitar que este anuncio aparezca de nuevo durante esta sesión de navegación
-            sessionStorage.setItem('ad_closed_' + adId, 'true');
-            if (timerId) clearTimeout(timerId); // Limpiar el timer si el usuario lo cerró antes
+
+            sessionStorage.setItem(
+                'ad_closed_' + adId,
+                'true'
+            );
+
+            if (timerId) {
+                clearTimeout(timerId);
+            }
         }
     }
 
-    /**
-     * 5. INYECCIÓN DE ESTILOS CSS
-     * Se inyectan estilos globales necesarios solo para el MODO A y el contenedor.
-     * Mantener los estilos livianos y sin interferir en la página padre.
-     */
     function injectStyles() {
+
+        if (document.getElementById('ad-network-styles')) return;
+
         const style = document.createElement('style');
-        style.type = 'text/css';
+
+        style.id = 'ad-network-styles';
+
         style.innerHTML = `
             #${CONFIG.containerId} {
                 position: fixed;
-                top: 50%; /* Centrado verticalmente */
+                top: 50%;
                 transform: translateY(-50%);
-                left: 20px; /* Pegado a la izquierda */
-                width: 160px; /* Ancho típico de banner lateral vertical */
+                left: 20px;
+                width: 160px;
                 height: auto;
                 z-index: 2147483647;
                 pointer-events: none;
@@ -89,24 +77,25 @@
                 margin: 0;
                 padding: 0;
             }
-            /* Reactivamos los eventos de mouse solo sobre el contenido visible */
+
             #${CONFIG.containerId} > * {
-                pointer-events: auto; 
+                pointer-events: auto;
             }
-            
-            /* --- ESTILOS MODO A --- */
+
             .ad-net-content {
                 position: relative;
                 display: inline-block;
                 width: 100%;
-                max-width: 160px; /* Más ancho para el modo lateral */
+                max-width: 160px;
                 padding-top: 10px;
                 padding-right: 10px;
             }
+
             .ad-net-link {
                 display: block;
                 text-decoration: none;
             }
+
             .ad-net-img {
                 width: 100%;
                 height: auto;
@@ -114,11 +103,12 @@
                 display: block;
                 background: transparent;
             }
+
             .ad-net-close {
                 position: absolute;
                 top: 1px;
                 right: 1px;
-                background: rgba(0, 0, 0, 0.4);
+                background: rgba(0,0,0,0.4);
                 color: white;
                 width: 22px;
                 height: 22px;
@@ -129,33 +119,33 @@
                 font-family: Arial, sans-serif;
                 cursor: pointer;
                 border: 2px solid white;
-                text-decoration: none !important;
                 font-weight: bold;
                 transition: background 0.3s, transform 0.2s;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.3);
             }
+
             .ad-net-close:hover {
                 background: #ff3333;
                 transform: scale(1.1);
             }
-            
-            /* --- ESTILOS MODO B --- */
+
             .ad-net-iframe {
                 border: none;
-                width: 100%; 
-                height: 300px; /* Altura inicial generosa para el rectángulo lateral */
+                width: 100%;
+                min-height: 300px;
                 background: transparent;
                 overflow: hidden;
             }
         `;
+
         document.head.appendChild(style);
     }
 
-    /**
-     * 6. RENDERIZADO: MODO A
-     * Render directo utilizando elementos del DOM (div + img).
-     */
     function renderModeA(adData, container) {
+
+        const preloadImg = new Image();
+        preloadImg.src = adData.gif;
+
         const content = document.createElement('div');
         content.className = 'ad-net-content';
 
@@ -175,153 +165,232 @@
         const closeBtn = document.createElement('div');
         closeBtn.className = 'ad-net-close';
         closeBtn.innerHTML = '×';
-        closeBtn.title = 'Cerrar anuncio';
 
-        // Auto-cierre basado en property "duration"
         let timerId = null;
-        if (adData.duration && adData.duration > 0) {
+
+        // duration 0 = infinito
+        if (
+            typeof adData.duration === 'number' &&
+            adData.duration > 0
+        ) {
+
             timerId = setTimeout(() => {
                 closeAd(adData.id, null);
             }, adData.duration);
         }
 
-        // Evento de cerrar manual
         closeBtn.onclick = function (e) {
+
             e.preventDefault();
             e.stopPropagation();
+
             closeAd(adData.id, timerId);
         };
 
         content.appendChild(link);
         content.appendChild(closeBtn);
+
         container.appendChild(content);
     }
 
-    /**
-     * 7. RENDERIZADO: MODO B
-     * Render mediante iframe de aislamiento (ad.html).
-     */
     function renderModeB(adData, container) {
+
         const iframe = document.createElement('iframe');
 
-        // Inyectamos la información al iframe a través de la URL de forma segura
-        const dataStr = encodeURIComponent(JSON.stringify(adData));
-        iframe.src = `${CONFIG.iframeUrl}?data=${dataStr}`;
+        const dataStr = encodeURIComponent(
+            JSON.stringify(adData)
+        );
+
+        iframe.src =
+            `${CONFIG.iframeUrl}?data=${dataStr}`;
 
         iframe.className = 'ad-net-iframe';
-        iframe.allowTransparency = 'true'; // Necesario en algunos navegadores antiguos para ver fondos transparentes
+
+        iframe.allowTransparency = 'true';
+
         iframe.scrolling = 'no';
 
-        // Auto-cierre
         let timerId = null;
-        if (adData.duration && adData.duration > 0) {
+
+        // duration 0 = infinito
+        if (
+            typeof adData.duration === 'number' &&
+            adData.duration > 0
+        ) {
+
             timerId = setTimeout(() => {
                 closeAd(adData.id, null);
             }, adData.duration);
         }
 
-        // Comunicar con el iframe a través de postMessage (Manejo de estados)
         window.addEventListener('message', function (event) {
+
             if (!event.data) return;
 
-            // Cerrar provocado desde el botón dentro del iframe
-            if (event.data.action === 'closeAd' && event.data.id === adData.id) {
+            if (
+                event.data.action === 'closeAd' &&
+                event.data.id === adData.id
+            ) {
+
                 closeAd(adData.id, timerId);
             }
 
-            // Auto redimensionar el iframe al alto real de la imagen calculada
-            if (event.data.action === 'resizeAd' && event.data.height) {
-                iframe.style.height = event.data.height + 'px';
+            if (
+                event.data.action === 'resizeAd' &&
+                event.data.height
+            ) {
+
+                iframe.style.height =
+                    event.data.height + 'px';
             }
+
         });
 
         container.appendChild(iframe);
     }
 
-    /**
-     * 8. NUCLEO PRINCIPAL DE INICIO
-     * Ejecuta el fetch asíncrono y dispara la inyección.
-     */
     async function initAdNetwork() {
+
         try {
-            // Detectar idioma del navegador (ej: 'es-ES' -> 'es')
-            const userLang = (navigator.language || navigator.userLanguage || 'en').substring(0, 2).toLowerCase();
-            // Validar si el idioma está entre nuestras carpetas (ingles por defecto)
-            const adLang = ['es', 'en'].includes(userLang) ? userLang : 'en';
 
-            // Construir ruta absoluta hacia la carpeta del idioma (ej: 'http://localhost:8080/es/ad_lateral.json')
-            const dynamicApiUrl = `${CONFIG.baseUrl}/${adLang}/ad_lateral.json`;
+            const userLang =
+                (
+                    navigator.language ||
+                    navigator.userLanguage ||
+                    'en'
+                )
+                .substring(0, 2)
+                .toLowerCase();
 
-            // Solicitar anuncios a la API (que ahora es una lista/array)
+            const adLang =
+                ['es', 'en'].includes(userLang)
+                    ? userLang
+                    : 'en';
+
+            const dynamicApiUrl =
+                `${CONFIG.baseUrl}/${adLang}/ad_lateral.json`;
+
             const response = await fetch(dynamicApiUrl);
-            if (!response.ok) throw new Error('Network response was not ok');
+
+            if (!response.ok) {
+                throw new Error('Network error');
+            }
+
             let adsList = await response.json();
 
-            // Validar que sea un array y contenga anuncios. Si es un objeto (formato antiguo), lo convertimos a array.
+            // Compatibilidad objeto antiguo
             if (!Array.isArray(adsList)) {
+
                 if (adsList && adsList.id) {
                     adsList = [adsList];
                 } else {
                     return;
                 }
             }
+
             if (adsList.length === 0) return;
 
-            // Filtrar los anuncios que ya fueron cerrados en esta sesión
-            const availableAds = adsList.filter(ad => {
-                return sessionStorage.getItem('ad_closed_' + ad.id) !== 'true';
-            });
+            const availableAds =
+                adsList.filter(ad => {
 
-            // Si no quedan anuncios disponibles, detener ejecución
+                    return (
+                        sessionStorage.getItem(
+                            'ad_closed_' + ad.id
+                        ) !== 'true'
+                    );
+
+                });
+
             if (availableAds.length === 0) return;
 
-            // Escoger un anuncio al azar
-            const randomIndex = Math.floor(Math.random() * availableAds.length);
-            const adData = availableAds[randomIndex];
+            const randomIndex =
+                Math.floor(
+                    Math.random() *
+                    availableAds.length
+                );
 
-            // Validar esquema básico del anuncio elegido
-            if (!adData || !adData.id || !adData.gif || !adData.link) return;
+            const adData =
+                availableAds[randomIndex];
 
-            // Sanitizar inputs
-            adData.gif = sanitizeUrl(adData.gif);
-            adData.link = sanitizeUrl(adData.link);
+            if (
+                !adData ||
+                !adData.id ||
+                !adData.gif ||
+                !adData.link
+            ) {
+                return;
+            }
 
-            // En caso que sanitización falle la URL es maliciosa y se aborta
-            if (!adData.gif || !adData.link) return;
+            adData.gif =
+                sanitizeUrl(adData.gif);
 
-            // Inyectar CSS global
+            adData.link =
+                sanitizeUrl(adData.link);
+
+            if (
+                !adData.gif ||
+                !adData.link
+            ) {
+                return;
+            }
+
             injectStyles();
 
-            // Insertar div wrapper flotante
-            const container = document.createElement('div');
-            container.id = CONFIG.containerId;
-            document.body.appendChild(container);
+            const container =
+                document.createElement('div');
 
-            // Bifurcación funcional dependiendo del modo elegido
-            if (CONFIG.mode === 'A') {
-                renderModeA(adData, container);
-            } else if (CONFIG.mode === 'B') {
-                renderModeB(adData, container);
+            container.id =
+                CONFIG.containerId;
+
+            if (!document.body) {
+
+                document.addEventListener(
+                    'DOMContentLoaded',
+                    () => {
+                        document.body.appendChild(container);
+                    }
+                );
+
             } else {
-                console.warn('Ad Network: MODO no valido especificado.');
+
+                document.body.appendChild(container);
+
+            }
+
+            if (CONFIG.mode === 'A') {
+
+                renderModeA(
+                    adData,
+                    container
+                );
+
+            } else if (CONFIG.mode === 'B') {
+
+                renderModeB(
+                    adData,
+                    container
+                );
+
             }
 
         } catch (error) {
-            // Falla de manera silenciosa para no ensuciar la consola de la pagina publicadora
-            // Ni quebrar funcionalidades del sitio.
-            // console.error('Ad Network API Error:', error.message);
+
+            // fallo silencioso
+
         }
     }
 
-    /**
-     * 9. EVENTOS DE CARGA MÚLTIPLE
-     * Ejecutará el código después de que el DOM esté interactivo, o inmediatamente
-     * si el script se ha inyectado con retraso (deferred load).
-     */
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initAdNetwork);
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            initAdNetwork
+        );
+
     } else {
+
         initAdNetwork();
+
     }
 
 })();
